@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<title>UGP Library</title>
 </head>
 <body>
     <div id="app">
@@ -24,22 +26,7 @@
               </v-toolbar>
               <!--Toolbar-->
               <v-content>
-                  <v-container grid-list-xs align-center text-xs-center>
-                      <v-layout row wrap justify-center>
-                      <v-flex xs6 sm5 md4>
-                        <h1>UGP Tabletop Library</h1>
-                      <p class="grey--text text--lighten-1">
-                        "Mordhan awoke from his nightmare covered in sweat, clutching his heart. 
-                        Maybe one day he'd tell his friends about these nightmare's, 
-                        but his current worry was the all too relevant Owlbear mating season."
-                      </p>
-                      <v-btn depressed small color="error" v-on:click="genreFilter()">Adventures</v-btn>
-                      <v-btn depressed small color="error">Rule Books</v-btn>
-                      <v-btn depressed small color="error">Rule Supplement</v-btn>
-                      <v-btn depressed small color="error">Source Books</v-btn>
-                    </v-flex>
-                    </v-layout>
-                  </v-container>
+
                 </v-content>
 
                 <template>
@@ -47,7 +34,7 @@
                     <v-container grid-list-xl align-center>
                         <v-layout row justify-center wrap>
                             
-                            <v-flex v-for="card in cardArray" :key="card.ID" :id="card.ID" xs2>
+                            <v-flex xs2 v-for="card in cardArray" :key="card.ID" :id="card.ID">
                                 <v-card max-width="300px" max-height="550" min-height="550">
                                 <a :href="card.URL">
                                 <v-img
@@ -77,17 +64,6 @@
                 </v-content>
               </template>
 
-              <!--Left Drawer Content-->
-              <v-navigation-drawer
-                v-model="drawer"
-                fixed
-                app
-              >
-              </v-navigation-drawer>
-              <!--Left Drawer-->
-              
-          
-
             </v-app>
           </template>
     </div>
@@ -98,60 +74,32 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   <script>
 
-// $(document).ready(function(){    
-//     $.ajax({
-//         url:"books_data.php",
-//         method:"GET",
-//         dataType:"JSON",
-//         success:function(data) {
-//             jobList = data 
-//             console.log(data)
-//                 cardArray = data
-//         }
-//    })
-// });
-
-var cardArray = []
-
-fetch('books_data.php')
-            .then(response => response.json())
-            .then((data) => {
-              this.cardArray = data
-      })
+let returnedCardData;
 
 const app = new Vue({
     el: '#app',
     data: () => ({
-    drawer: false,
-    right: null,
-    left: null,
-    cardArray: [],
+      drawer: false,
+      right: null,
+      left: null,
+      cardArray: [],
   }),
   mounted() {
-          fetch('books_data.php')
+          fetch('cover_data.php')
             .then(response => response.json())
             .then((data) => {
+              returnedCardData = data
               this.cardArray = data
       })
   },
-  // methods:{
-  //     genreFilter: function (event) {
-  //         for (var i = 0; i < cardArray.length; i++) {
-  //           if (cardArray[i].GENRE == "Adventure") {
-  //               document.getElementById(i).style.display = "block"
-  //           } else {    
-  //               document.getElementById(i).style.display = "none"
-  //           }
-  //         } 
-  //     }
-  //   },
+
 
   props: {
     source: String
   }
 })
 
-  
+  // <v-btn depressed small color="error" v-on:click="genreFilter('genre.GENRE')">Adventures</v-btn>
     
 </script>
 
