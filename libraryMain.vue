@@ -12,7 +12,9 @@
                 clipped-right
               >
                 <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-                <v-spacer></v-spacer>
+                <v-toolbar-items>
+                    <v-btn flat>Home</v-btn>
+                  </v-toolbar-items>
               </v-toolbar>
               <!--Toolbar-->
               <v-content>
@@ -25,10 +27,9 @@
                         Maybe one day he'd tell his friends about these nightmare's, 
                         but his current worry was the all too relevant Owlbear mating season."
                       </p>
-                      <v-btn  depressed small v-bind:color="btnAdventureColor" v-on:click="handler('Adventure', 'btnAdventureColor')">Adventure</v-btn>
-                      <v-btn  depressed small v-bind:color="btnRuleBookColor" v-on:click="handler('Rule Book', 'btnRuleBookColor')" >Rule Book</v-btn>
-                      <v-btn  depressed small v-bind:color="btnRuleSupplementColor" v-on:click="handler('Rule Supplement', 'btnRuleSupplementColor')">Rule Supplement</v-btn>
-                      <v-btn  depressed small v-bind:color="btnSourceBookColor" v-on:click="handler('Source Book', 'btnSourceBookColor')">Source Book</v-btn>
+                      <div>
+                      <v-btn  depressed small v-for="(button, index) in buttons" @click="onClick(index)" :disabled="buttons[index]">Adventure</v-btn>
+                    </div>
                     </v-flex>
                     </v-layout>
                   </v-container>
@@ -97,16 +98,16 @@
                 <v-btn depressed small color="error" v-on:click="genreFilter('Rule Book')" >Nathan</v-btn>
               </div>  
               <div>
-                <v-btn depressed small color="error" v-on:click="genreFilter('Rule Book')" >Carlos</v-btn>
+                <v-btn depressed small color="error" v-on:click="genreFilter('Rule Book')">Carlos</v-btn>
                 </div>  
               <div>
-                <v-btn depressed small color="error" v-on:click="genreFilter('Rule Book')" >Quinn</v-btn>
+                <v-btn depressed small color="error" v-on:click="genreFilter('Rule Book')">Quinn</v-btn>
               </div>
               <div>
-                  <v-btn depressed small color="success" v-on:click="genreFilter('Rule Book')" >Maps</v-btn>
+                  <v-btn depressed small color="success" v-on:click="genreFilter('Rule Book')">Maps</v-btn>
               </div>  
               <div>
-                  <v-btn depressed small color="info" v-on:click="genreFilter('Rule Book')" >Timeline</v-btn>
+                  <v-btn depressed small color="info" v-on:click="genreFilter('Rule Book')">Timeline</v-btn>
               </div>  
               </v-navigation-drawer>
               <!--Left Drawer-->
@@ -143,9 +144,18 @@ const app = new Vue({
       searchTerm: null,
       activeGenreFilter: null,
       activeSearchFilter: null,
+      btnFilterArray: [],
       cardArray: [],
+      buttons: [false, false, false, false],
   }),
   methods:{
+    onClick(index) {
+      if (this.buttons.every(b => !b)) {
+        this.buttons = this.buttons.map((b, i) => (i === index ? false : true));
+      } else {
+        this.buttons = this.buttons.map(b => false);
+      }
+    },
     handler: function(genreType, btnActiveColor) {
       this.genreFilter(genreType)
       this.btnColor(btnActiveColor)
@@ -177,40 +187,7 @@ const app = new Vue({
         this.activeSearchFilter = searchTerm
      }
     },
-      btnColor: function(btnActiveColor) {
-        if (btnActiveColor == "btnAdventureColor") {
-          if (this.btnAdventureColor == "error") {
-            this.btnAdventureColor = "success"
-          }
-          else {
-            this.btnAdventureColor = "error"
-          }
-        }
-        else if (btnActiveColor == "btnRuleBookColor") {
-          if (this.btnRuleBookColor == "error") {
-            this.btnRuleBookColor = "success"
-          }
-          else {
-            this.btnRuleBookColor = "error"
-          }
-        }
-        else if (btnActiveColor == "btnRuleSupplementColor") {
-          if (this.btnRuleSupplementColor == "error") {
-            this.btnRuleSupplementColor = "success"
-          }
-          else {
-            this.btnRuleSupplementColor = "error"
-          }
-        }
-        else if (btnActiveColor == "btnSourceBookColor") {
-          if (this.btnSourceBookColor == "error") {
-            this.btnSourceBookColor = "success"
-          }
-          else {
-            this.btnSourceBookColor = "error"
-          }
-        }
-      }
+
     },
   mounted() {
           fetch('books_data.php')

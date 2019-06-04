@@ -14,37 +14,58 @@
               >
                 <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
                 <v-spacer></v-spacer>
+                    <v-toolbar-items>
+                      <v-btn flat>1st Edition</v-btn>
+                      <v-btn flat>AD&D</v-btn>
+                      <v-btn flat>AD&D 2E</v-btn>
+                      <v-btn flat>3rd Edition</v-btn>
+                      <v-btn flat>4th Edition</v-btn>
+                      <v-btn flat>5th Edition</v-btn>
+                    </v-toolbar-items>
               </v-toolbar>
               <!--Toolbar-->
-              <v-content>
 
-                </v-content>
+               <!--Left Drawer Content-->
+               <v-navigation-drawer
+               v-model="drawer"
+               fixed
+               app
+               dark
+             >
+             </v-navigation-drawer>
+             <!--Left Drawer-->
 
                 <template>
                 <v-content>
                     <v-container grid-list-xl align-center>
                         <v-layout row justify-center wrap>
                             
-                            <v-flex xs2 v-for="card in cardArray" :key="card.ID" :id="card.ID">
-                                <v-card max-width="300px" max-height="550" min-height="550">
-                                <a :href="card.URL">
-                                <v-img
-                                  :src="card.IMAGE"
-                                  height="300px"
-                                  contain
-                                  alt="No Image"
-                                >
-                                </v-img>
-                                </a>
-                                <v-card-title primary-title>
-                                  <div>
-                                      <span ><h3>{{card.TITLE}}</h3></span><br>
-                                    <span><b>{{card.GENRE}}</b></span><br>
-                                    <span>{{card.DESCRIPTION}}</span>
-                                  </div>
-                                </v-card-title>
-                              </v-card>
-                              </v-flex>
+                                <v-timeline>
+                                    <v-timeline-item
+                                    v-for="card in cardArray" :key="card.ID"
+                                      color="red lighten-2"
+                                      large
+                                    >
+                                      <template v-slot:opposite>
+                                        <span>{{card.GENRE}}</span>
+                                      </template>
+                                      <v-card class="elevation-2">
+                                        <v-card-title class="headline">{{card.TITLE}}</v-card-title>
+                                        <v-card-text>
+                                          <a href="libraryMain.vue">
+                                            <v-img
+                                            :src="card.IMAGE"                                          
+                                            contain
+                                            alt="No Image"
+                                          >
+                                          </v-img>
+                                        </a>
+                                          <br>
+                                            {{card.DESCRIPTION}}
+                                        </v-card-text>
+                                      </v-card>
+                                    </v-timeline-item>
+                                  </v-timeline>
               
                         </v-layout>
                       </v-container>
@@ -66,8 +87,6 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   <script>
 
-let returnedCardData;
-
 const app = new Vue({
     el: '#app',
     data: () => ({
@@ -80,7 +99,6 @@ const app = new Vue({
           fetch('cover_data.php')
             .then(response => response.json())
             .then((data) => {
-              returnedCardData = data
               this.cardArray = data
       })
   },
